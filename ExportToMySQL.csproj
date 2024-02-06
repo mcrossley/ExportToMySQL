@@ -1,37 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyTitle>ExportToMySQL</AssemblyTitle>
+    <Description>Exports Cumulus data files to MySQL</Description>
+    <Product>ExportToMySQL</Product>
+    <Copyright>Copyright ©  2015-$([System.DateTime]::Now.ToString('yyyy') Cumulus MX</Copyright>
+    <AssemblyVersion>$(PackageVersion)</AssemblyVersion>
+    <FileVersion>$(PackageVersion)</FileVersion>
+    <Version>2.0.0.0001</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MySqlConnector">
@@ -40,23 +22,10 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.0" />
   </ItemGroup>
-  <PropertyGroup>
-    <PostBuildEvent>if $(Configuration)==Release (
-echo.
-echo Update Distribution folder
-echo copy exe
-xcopy "$(TargetPath)" "$((ProjectDir)..\CumulusMX-Dist.Net\CumulusMX" /D /-I /Q /Y
-xcopy "$(OutputPath)\ExportToMySQL.exe" "$((ProjectDir)..\CumulusMX-Dist.Net\CumulusMX" /D /-I /Q /Y
-echo copy config
-xcopy "$(TargetPath).config" "$((ProjectDir)..\CumulusMX-Dist.Net\CumulusMX" /D /-I /Q /Y
-xcopy "$(OutputPath)\ExportToMySQL.runtimeconfig.json" "$((ProjectDir)..\CumulusMX-Dist.Net\CumulusMX" /D /-I /Q /Y
-)</PostBuildEvent>
-    <AssemblyTitle>ExportToMySQL</AssemblyTitle>
-    <Description>Exports Cumulus data files to MySQL</Description>
-    <Product>ExportToMySQL</Product>
-    <Copyright>Copyright ©  2015-$([System.DateTime]::Now.ToString('yyyy') Cumulus MX</Copyright>
-    <AssemblyVersion>$(PackageVersion)</AssemblyVersion>
-    <FileVersion>$(PackageVersion)</FileVersion>
-    <Version>2.0.0.0000</Version>
-  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="packages\" />
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if $(Configuration)==Release (&#xD;&#xA;echo.&#xD;&#xA;echo Update Distribution folder&#xD;&#xA;echo copy exe&#xD;&#xA;xcopy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\CumulusMX-Dist.Net\CumulusMX&quot; /D /-I /Q /Y&#xD;&#xA;xcopy &quot;$(OutputPath)\ExportToMySQL.exe&quot; &quot;$(ProjectDir)..\CumulusMX-Dist.Net\CumulusMX&quot; /D /-I /Q /Y&#xD;&#xA;echo copy config&#xD;&#xA;xcopy &quot;$(TargetPath).config&quot; &quot;$(ProjectDir)..\CumulusMX-Dist.Net\CumulusMX&quot; /D /-I /Q /Y&#xD;&#xA;xcopy &quot;$(OutputPath)\ExportToMySQL.runtimeconfig.json&quot; &quot;$(ProjectDir)..\CumulusMX-Dist.Net\CumulusMX&quot; /D /-I /Q /Y&#xD;&#xA;)" />
+  </Target>
 </Project>
