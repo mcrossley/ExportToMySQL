@@ -166,7 +166,7 @@ namespace ExportToMySQL
 					{
 						line = sr.ReadLine();
 						linenum++;
-						var st = new List<string>(Regex.Split(line, CultureInfo.CurrentCulture.TextInfo.ListSeparator));
+						var st = new List<string>(line.Split(','));
 
 						if (st.Count < 16)
 						{
@@ -193,7 +193,7 @@ namespace ExportToMySQL
 						{
 							if (i < st.Count && !string.IsNullOrEmpty(st[i]))
 							{
-								sb.Append($"'{st[i].Replace(',', '.')}',");
+								sb.Append($"'{st[i]}',");
 							}
 							else
 							{
@@ -294,7 +294,7 @@ namespace ExportToMySQL
 							{
 								if (i < st.Count && !string.IsNullOrEmpty(st[i]))
 								{
-									sb.Append("'" + st[i].Replace(',', '.') + "',");
+									sb.Append("'" + st[i] + "',");
 								}
 								else
 								{
