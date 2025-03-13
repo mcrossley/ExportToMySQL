@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Text.RegularExpressions;
 
 using CumulusMX;
 using MySqlConnector;
 
 namespace ExportToMySQL
 {
-	internal class Program
+	internal static class Program
 	{
 		private static string MySqlMonthlyTable;
 		private static string MySqlDayfileTable;
 		private static byte[] InstanceId;
-
 		private static readonly string[] compassp = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
-
 		private static MySqlCommand cmd;
 
 		private static void Main(string[] args)
@@ -145,6 +141,7 @@ namespace ExportToMySQL
 		{
 			Console.WriteLine("Processing file:" + filename);
 
+			// NOTE: WindbearingSym,CurrWindBearingSym are out of order for convenience
 			var StartOfMonthlyInsertSQL = "INSERT IGNORE INTO " + MySqlMonthlyTable + " (LogDateTime,Temp,Humidity,Dewpoint,Windspeed,Windgust,Windbearing,RainRate,TodayRainSoFar,Pressure,Raincounter,InsideTemp,InsideHumidity,LatestWindGust,WindChill,HeatIndex,UVindex,SolarRad,Evapotrans,AnnualEvapTran,ApparentTemp,MaxSolarRad,HrsSunShine,CurrWindBearing,RG11rain,RainSinceMidnight,FeelsLike,Humidex,WindbearingSym,CurrWindBearingSym)";
 
 			using var sr = new StreamReader(filename);
@@ -261,6 +258,7 @@ namespace ExportToMySQL
 			if (File.Exists(filename))
 			{
 				Console.WriteLine("Dayfile exists, beginning export");
+				// NOTE: HWindGBearSym,DomWindDirSym are out of order for convenience
 				string StartOfDayfileInsertSQL = "INSERT IGNORE INTO " + MySqlDayfileTable + " (LogDate,HighWindGust,HWindGBear,THWindG,MinTemp,TMinTemp,MaxTemp,TMaxTemp,MinPress,TMinPress,MaxPress,TMaxPress,MaxRainRate,TMaxRR,TotRainFall,AvgTemp,TotWindRun,HighAvgWSpeed,THAvgWSpeed,LowHum,TLowHum,HighHum,THighHum,TotalEvap,HoursSun,HighHeatInd,THighHeatInd,HighAppTemp,THighAppTemp,LowAppTemp,TLowAppTemp,HighHourRain,THighHourRain,LowWindChill,TLowWindChill,HighDewPoint,THighDewPoint,LowDewPoint,TLowDewPoint,DomWindDir,HeatDegDays,CoolDegDays,HighSolarRad,THighSolarRad,HighUV,THighUV,MaxFeelsLike,TMaxFeelsLike,MinFeelsLike,TMinFeelsLike,MaxHumidex,TMaxHumidex,ChillHours,HighRain24h,THighRain24h,HWindGBearSym,DomWindDirSym)";
 
 				var linenum = 0;
@@ -332,7 +330,7 @@ namespace ExportToMySQL
 			}
 			else
 			{
-				Console.WriteLine("Dafile not found - " + filename);
+				Console.WriteLine("Dayfile not found - " + filename);
 			}
 		}
 
