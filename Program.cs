@@ -13,7 +13,7 @@ namespace ExportToMySQL
 		private static string MySqlMonthlyTable;
 		private static string MySqlDayfileTable;
 		private static byte[] InstanceId;
-		private static readonly string[] compassp = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+		private static readonly string[] compassp;
 		private static MySqlCommand cmd;
 
 		private static void Main(string[] args)
@@ -171,40 +171,39 @@ namespace ExportToMySQL
 							continue;
 						}
 
-						var logfiledate = st[0];
-						// 01234567
-						// dd/mm/yy
-
-						var logfiletime = st[1];
-						// 01234
-						// hh:mm
-
-						//Console.WriteLine(st[0]);
-
-						string sqldate = logfiledate.Substring(6, 2) + '-' + logfiledate.Substring(3, 2) + '-' + logfiledate[..2] + ' ' + logfiletime[..2] + ':' + logfiletime.Substring(3, 2);
-
-						Console.Write(sqldate + "\r");
-						sb.Append($"('{sqldate}',");
-
-						for (int i = 2; i < 29; i++)
+						if (long.TryParse(st[1], out var ts))
 						{
-							if (i < st.Count && !string.IsNullOrEmpty(st[i]))
+							var logfiledatetime = ts.FromUnixTime();
+
+							string sqldate = logfiledatetime.ToString("yyyy-MM-dd HH:mm");
+
+							Console.Write(sqldate + "\r");
+							sb.Append($"('{sqldate}',");
+
+							for (int i = 2; i < 29; i++)
 							{
-								sb.Append($"'{st[i]}',");
+								if (i < st.Count && !string.IsNullOrEmpty(st[i]))
+								{
+									sb.Append($"'{st[i]}',");
+								}
+								else
+								{
+									sb.Append("NULL,");
+								}
+							}
+							sb.Append($"'{CompassPoint(Convert.ToInt32(st[7]))}',");
+							if (st.Count > 24 && !string.IsNullOrEmpty(st[24]))
+							{
+								sb.Append($"'{CompassPoint(Convert.ToInt32(st[24]))}'),");
 							}
 							else
 							{
-								sb.Append("NULL,");
+								sb.Append("NULL),");
 							}
-						}
-						sb.Append($"'{CompassPoint(Convert.ToInt32(st[7]))}',");
-						if (st.Count > 24 && !string.IsNullOrEmpty(st[24]))
-						{
-							sb.Append($"'{CompassPoint(Convert.ToInt32(st[24]))}'),");
 						}
 						else
 						{
-							sb.Append("NULL),");
+							Console.WriteLine($"Error: Line {linenum} has invalid timestamp '{st[1]}'");
 						}
 					} // End For loop for the batch
 
