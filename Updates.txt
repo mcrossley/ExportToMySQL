@@ -1,4 +1,9 @@
-﻿ver 2.4.0
+﻿ver 3.0.0
+---------
+- Support for MX v4.7.0
+
+
+ver 2.4.0
 ---------
 - Support for MX v4.4.0
 

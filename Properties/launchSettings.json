@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ExportToMySQL": {
+      "commandName": "Project",
+      "commandLineArgs": "data/202601log.txt"
+    }
+  }
+}

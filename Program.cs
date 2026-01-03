@@ -13,7 +13,7 @@ namespace ExportToMySQL
 		private static string MySqlMonthlyTable;
 		private static string MySqlDayfileTable;
 		private static byte[] InstanceId;
-		private static readonly string[] compassp;
+		private static readonly string[] compassp = new string[16];
 		private static MySqlCommand cmd;
 
 		private static void Main(string[] args)
@@ -91,26 +91,23 @@ namespace ExportToMySQL
 				Connection = mySqlConn
 			};
 
-			if (File.Exists("strings.ini"))
-			{
-				IniFile iniStrs = new("strings.ini");
-				compassp[0] = iniStrs.GetValue("Compass", "N", "N");
-				compassp[1] = iniStrs.GetValue("Compass", "NNE", "NNE");
-				compassp[2] = iniStrs.GetValue("Compass", "NE", "NE");
-				compassp[3] = iniStrs.GetValue("Compass", "ENE", "ENE");
-				compassp[4] = iniStrs.GetValue("Compass", "E", "E");
-				compassp[5] = iniStrs.GetValue("Compass", "ESE", "ESE");
-				compassp[6] = iniStrs.GetValue("Compass", "SE", "SE");
-				compassp[7] = iniStrs.GetValue("Compass", "SSE", "SSE");
-				compassp[8] = iniStrs.GetValue("Compass", "S", "S");
-				compassp[9] = iniStrs.GetValue("Compass", "SSW", "SSW");
-				compassp[10] = iniStrs.GetValue("Compass", "SW", "SW");
-				compassp[11] = iniStrs.GetValue("Compass", "WSW", "WSW");
-				compassp[12] = iniStrs.GetValue("Compass", "W", "W");
-				compassp[13] = iniStrs.GetValue("Compass", "WNW", "WNW");
-				compassp[14] = iniStrs.GetValue("Compass", "NW", "NW");
-				compassp[15] = iniStrs.GetValue("Compass", "NNW", "NNW");
-			}
+			IniFile iniStrs = new("strings.ini");
+			compassp[0] = iniStrs.GetValue("Compass", "N", "N");
+			compassp[1] = iniStrs.GetValue("Compass", "NNE", "NNE");
+			compassp[2] = iniStrs.GetValue("Compass", "NE", "NE");
+			compassp[3] = iniStrs.GetValue("Compass", "ENE", "ENE");
+			compassp[4] = iniStrs.GetValue("Compass", "E", "E");
+			compassp[5] = iniStrs.GetValue("Compass", "ESE", "ESE");
+			compassp[6] = iniStrs.GetValue("Compass", "SE", "SE");
+			compassp[7] = iniStrs.GetValue("Compass", "SSE", "SSE");
+			compassp[8] = iniStrs.GetValue("Compass", "S", "S");
+			compassp[9] = iniStrs.GetValue("Compass", "SSW", "SSW");
+			compassp[10] = iniStrs.GetValue("Compass", "SW", "SW");
+			compassp[11] = iniStrs.GetValue("Compass", "WSW", "WSW");
+			compassp[12] = iniStrs.GetValue("Compass", "W", "W");
+			compassp[13] = iniStrs.GetValue("Compass", "WNW", "WNW");
+			compassp[14] = iniStrs.GetValue("Compass", "NW", "NW");
+			compassp[15] = iniStrs.GetValue("Compass", "NNW", "NNW");
 
 			if (param.ToLower().Equals("dayfile"))
 			{
@@ -216,7 +213,7 @@ namespace ExportToMySQL
 
 					int aff = cmd.ExecuteNonQuery();
 
-					//Console.WriteLine();
+					Console.WriteLine("  Inserted " + aff + " rows");
 				}
 				catch (Exception ex)
 				{
