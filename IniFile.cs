@@ -8,8 +8,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Threading;
 
-namespace CumulusMX
+namespace ExportToMySQL
 {
 
 	internal class IniFile
@@ -18,7 +19,7 @@ namespace CumulusMX
 #region "Declarations"
 
 		// *** Lock for thread-safe access to file and local cache ***
-		private object mLock = new object();
+		private readonly Lock mLock = new Lock();
 
 		// *** File name ***
 		private string mFileName = null;

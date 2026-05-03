@@ -8,7 +8,7 @@
     <Copyright>Copyright ©  2015-$([System.DateTime]::Now.ToString('yyyy') Cumulus MX</Copyright>
     <AssemblyVersion>$(PackageVersion)</AssemblyVersion>
     <FileVersion>$(PackageVersion)</FileVersion>
-    <Version>3.0.0.0005</Version>
+    <Version>4.0.0.0006</Version>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

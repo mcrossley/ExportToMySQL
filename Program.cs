@@ -16,6 +16,9 @@ namespace ExportToMySQL
 		private static readonly string[] compassp = new string[16];
 		private static MySqlCommand cmd;
 
+		private const int DayFileFieldCount = 59;
+		private const int MonthlyLogFieldCount = 31;
+
 		private static void Main(string[] args)
 		{
 			string param = "";
@@ -139,7 +142,7 @@ namespace ExportToMySQL
 			Console.WriteLine("Processing file:" + filename);
 
 			// NOTE: WindbearingSym,CurrWindBearingSym are out of order for convenience
-			var StartOfMonthlyInsertSQL = "INSERT IGNORE INTO " + MySqlMonthlyTable + " (LogDateTime,Temp,Humidity,Dewpoint,Windspeed,Windgust,Windbearing,RainRate,TodayRainSoFar,Pressure,Raincounter,InsideTemp,InsideHumidity,LatestWindGust,WindChill,HeatIndex,UVindex,SolarRad,Evapotrans,AnnualEvapTran,ApparentTemp,MaxSolarRad,HrsSunShine,CurrWindBearing,RG11rain,RainSinceMidnight,FeelsLike,Humidex,WindbearingSym,CurrWindBearingSym)";
+			var StartOfMonthlyInsertSQL = "INSERT IGNORE INTO " + MySqlMonthlyTable + " (LogDateTime,Temp,Humidity,Dewpoint,Windspeed,Windgust,Windbearing,RainRate,TodayRainSoFar,Pressure,Raincounter,InsideTemp,InsideHumidity,LatestWindGust,WindChill,HeatIndex,UVindex,SolarRad,Evapotrans,AnnualEvapTran,ApparentTemp,MaxSolarRad,HrsSunShine,CurrWindBearing,RG11rain,RainSinceMidnight,FeelsLike,Humidex,BlackGlobeTemp,WetBulbGlobeTemp,WindbearingSym,CurrWindBearingSym)";
 
 			using var sr = new StreamReader(filename);
 			const int MaxBatchSize = 1000;
@@ -177,7 +180,7 @@ namespace ExportToMySQL
 							Console.Write(sqldate + "\r");
 							sb.Append($"('{sqldate}',");
 
-							for (int i = 2; i < 29; i++)
+							for (int i = 2; i < MonthlyLogFieldCount; i++)
 							{
 								if (i < st.Count && !string.IsNullOrEmpty(st[i]))
 								{
@@ -255,7 +258,7 @@ namespace ExportToMySQL
 			{
 				Console.WriteLine("Dayfile exists, beginning export");
 				// NOTE: HWindGBearSym,DomWindDirSym are out of order for convenience
-				string StartOfDayfileInsertSQL = "INSERT IGNORE INTO " + MySqlDayfileTable + " (LogDate,HighWindGust,HWindGBear,THWindG,MinTemp,TMinTemp,MaxTemp,TMaxTemp,MinPress,TMinPress,MaxPress,TMaxPress,MaxRainRate,TMaxRR,TotRainFall,AvgTemp,TotWindRun,HighAvgWSpeed,THAvgWSpeed,LowHum,TLowHum,HighHum,THighHum,TotalEvap,HoursSun,HighHeatInd,THighHeatInd,HighAppTemp,THighAppTemp,LowAppTemp,TLowAppTemp,HighHourRain,THighHourRain,LowWindChill,TLowWindChill,HighDewPoint,THighDewPoint,LowDewPoint,TLowDewPoint,DomWindDir,HeatDegDays,CoolDegDays,HighSolarRad,THighSolarRad,HighUV,THighUV,MaxFeelsLike,TMaxFeelsLike,MinFeelsLike,TMinFeelsLike,MaxHumidex,TMaxHumidex,ChillHours,HighRain24h,THighRain24h,HWindGBearSym,DomWindDirSym)";
+				string StartOfDayfileInsertSQL = "INSERT IGNORE INTO " + MySqlDayfileTable + " (LogDate,HighWindGust,HWindGBear,THWindG,MinTemp,TMinTemp,MaxTemp,TMaxTemp,MinPress,TMinPress,MaxPress,TMaxPress,MaxRainRate,TMaxRR,TotRainFall,AvgTemp,TotWindRun,HighAvgWSpeed,THAvgWSpeed,LowHum,TLowHum,HighHum,THighHum,TotalEvap,HoursSun,HighHeatInd,THighHeatInd,HighAppTemp,THighAppTemp,LowAppTemp,TLowAppTemp,HighHourRain,THighHourRain,LowWindChill,TLowWindChill,HighDewPoint,THighDewPoint,LowDewPoint,TLowDewPoint,DomWindDir,HeatDegDays,CoolDegDays,HighSolarRad,THighSolarRad,HighUV,THighUV,MaxFeelsLike,TMaxFeelsLike,MinFeelsLike,TMinFeelsLike,MaxHumidex,TMaxHumidex,ChillHours,HighRain24h,THighRain24h,HighBgt,THighBgt,HighWbgt,THighWbgt,HWindGBearSym,DomWindDirSym)";
 
 				var linenum = 0;
 				var line = string.Empty;
@@ -284,7 +287,7 @@ namespace ExportToMySQL
 
 							sb.Append($"'{sqldate}',");
 
-							for (int i = 1; i < 55; i++)
+							for (int i = 1; i < DayFileFieldCount; i++)
 							{
 								if (i < st.Count && !string.IsNullOrEmpty(st[i]))
 								{
